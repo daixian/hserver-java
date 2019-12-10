@@ -1,0 +1,48 @@
+server:
+  port: 12002
+
+spring:
+  datasource:
+    # 注意这个连接里面包含了数据库的名字 utf8mb4 -- UTF-8 Unicode  :jdbc:mysql://127.0.0.1:3306/av?useUnicode=true&characterEncoding=utf8mb48&useSSL=false&useOldAliasMetadataBehavior=true
+    url: jdbc:mysql://localhost:3306/av?useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: "root"
+    password: "root"
+#
+#    jpa:
+#      show-sql: true
+#
+#      # Hibernate ddl auto (create, create-drop, update)
+#      hibernate:
+#        ddl-auto: update
+#
+#        # Naming strategy
+#        #naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy #hibernate 5版本以后无效
+#
+#        naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#
+#      # Use spring.jpa.properties.* for Hibernate native properties (the prefix is
+#      # stripped before adding them to the entity manager)
+#
+#      # The SQL dialect makes Hibernate generate better SQL for the chosen database
+#      properties:
+#        hibernate:
+#          dialect: org.hibernate.dialect.MySQL5Dialect
+#          connection:
+#            characterEncoding: utf8
+#            CharSet: utf8
+#            useUnicode: true
+#          #DEBUG
+#          use_sql_comments: true
+#
+#      # Use spring.jpa.properties.* for Hibernate native properties (the prefix is
+#      # stripped before adding them to the entity manager)
+#
+#      # The SQL dialect makes Hibernate generate better SQL for the chosen database
+
+
+    http:
+      multipart:
+        max-file-size: 2048MB
+        max-request-size: 2048MB
