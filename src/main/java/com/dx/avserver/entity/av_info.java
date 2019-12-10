@@ -9,12 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * 对应数据库的实体
  */
+@Data
 @Entity
 @Getter
 @Setter
@@ -26,10 +28,10 @@ public class av_info implements Serializable {
     @Column(unique = true)
     private int id;
 
-    @Column(name = "av_id", unique = false, nullable = false)
+    @Column(name = "av_id", unique = true, nullable = false)
     private String avid;
 
-    @Column(name = "javbooks_id", unique = false)
+    @Column(name = "javbooks_id", unique = true)
     private int javbooks_id;
 
     @Column(name = "title")

@@ -6,6 +6,7 @@ import com.dx.avserver.entity.av_info;
 import com.dx.avserver.mapper.av_infoMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +20,16 @@ public class HelloController {
     @Autowired
     private AVInfoDao mAVInfoDao;
 
-    @RequestMapping(value = {"/hello", "/hi"}, method = RequestMethod.GET)
-    public av_infoDto say() {
-        log.info("进入了回调！");
-
-        av_info info = mAVInfoDao.findOneByavid("TGGP-089");
-        return av_infoMapper.INSTANCE.toDto(info);
+    /**
+     * 访问形式:http://127.0.0.1:12002/info/TGGP-089
+     * @param avid
+     * @return
+     */
+    @RequestMapping(value = {"/info/{avid}",}, method = RequestMethod.GET)
+    public av_infoDto say(@PathVariable("avid") String avid) {
+        log.info("进入了回调！av_id:" + avid);
+        av_info info = mAVInfoDao.findOneByavid(avid);
+        av_infoDto dto = av_infoMapper.INSTANCE.toDto(info);
+        return dto;
     }
 }

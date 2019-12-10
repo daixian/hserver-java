@@ -1,10 +1,12 @@
 package com.dx.avserver.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
 public class av_infoDto {
     private int id;
     private String av_id;
