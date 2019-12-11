@@ -73,16 +73,22 @@ public class HelloController {
     public ResponseDto SignIn(@RequestParam(value = "userID", required = true) String userID,
                               @RequestParam(value = "pwd", required = true) String pwd,
                               @RequestParam(value = "name", required = true) String name) {
+        if (userID.isEmpty()) {
+            return ResponseDto.FAIL();
+        }
+
         User user = mUserDao.findOneByUserID(userID);
         //如果找不到这个用户记录，那么就新建一条
         if (user == null) {
             user = new User();
             user.setUserID(userID);
             user.setPassword(pwd);
+            //如果昵称是空那么提供一个默认名字
             if (!name.isEmpty())
                 user.setName(name);
             else
                 user.setName("unnamed");
+
             user.setSignInDate(LocalDateTime.now());
             mUserDao.save(user);
             return ResponseDto.SUCCESS();
@@ -102,6 +108,10 @@ public class HelloController {
     @ResponseBody
     public ResponseDto login(@RequestParam(value = "userID", required = true) String userID,
                              @RequestParam(value = "pwd", required = true) String pwd) {
+        if (userID.isEmpty()) {
+            return ResponseDto.LOGIN_FAIL();
+        }
+
         //数据库查用户
         User user = mUserDao.findOneByUserID(userID);
         if (user == null) {
@@ -114,9 +124,11 @@ public class HelloController {
         //密码通过了,返回token
         String token = JwtUtils.sign(user.getUserID(), user.getName());
         if (token != null) {
+            user.setLastLoginDate(LocalDateTime.now());
+            mUserDao.save(user);
+
             Map<String, String> data = new HashMap<>();
             data.put("token", token);
-
             ResponseDto dto = ResponseDto.SUCCESS();
             dto.setData(data);
             return dto;

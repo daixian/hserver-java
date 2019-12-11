@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ResponseDto {
     private int status;
-//    private String error;
+    //    private String error;
     private String message;
     private Object data;
 
@@ -16,6 +16,8 @@ public class ResponseDto {
         this.status = status;
         this.message = msg;
     }
+
+//下面是一些规定好的类型
 
     public static ResponseDto SUCCESS() {
         return new ResponseDto(200, "OK");
