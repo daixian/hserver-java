@@ -1,13 +1,12 @@
 package com.dx.avserver.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+/**
+ * 一项av信息
+ */
 @Data
-public class av_infoDto {
+public class AVInfoDto {
     private int id;
     private String av_id;
     private int javbooks_id;

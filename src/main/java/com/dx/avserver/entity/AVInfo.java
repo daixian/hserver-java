@@ -10,18 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 对应数据库的实体
  */
 @Data
 @Entity
-@Getter
-@Setter
 @Table(name = "av_info_tbl")
-public class av_info implements Serializable {
+public class AVInfo implements Serializable {
 
     @Id //entity的
     @GeneratedValue(strategy = GenerationType.AUTO)
