@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AVInfoDao extends CrudRepository<AVInfo, String> {
 
-    List<AVInfo> findByavid(String avid);
+    List<AVInfo> findByAvid(String avid);
 
-    AVInfo findOneByavid(String avid);
+    AVInfo findOneByAvid(String avid);
 }

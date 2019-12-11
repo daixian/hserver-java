@@ -3,6 +3,7 @@ package com.dx.avserver.controller;
 import com.dx.avserver.dao.AVInfoDao;
 import com.dx.avserver.dao.UserDao;
 import com.dx.avserver.dto.AVInfoDto;
+import com.dx.avserver.utils.exception.ExceptionNotFound;
 import com.dx.avserver.dto.ResponseDto;
 import com.dx.avserver.entity.User;
 import com.dx.avserver.entity.AVInfo;
@@ -43,7 +44,9 @@ public class HelloController {
     @RequestMapping(value = {"/info/{avid}",}, method = RequestMethod.GET)
     public AVInfoDto getAVInfoWithAVID(@PathVariable("avid") String avid) {
         log.info("通过番号查询信息！av_id:" + avid);
-        AVInfo info = mAVInfoDao.findOneByavid(avid);
+        AVInfo info = mAVInfoDao.findOneByAvid(avid);
+        if (info == null)
+            throw new ExceptionNotFound();
         return AVInfoMapper.INSTANCE.toDto(info);
     }
 

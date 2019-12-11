@@ -66,7 +66,7 @@ public class JwtUtils {
     }
 
     /**
-     * 生成签名,15min后过期
+     * 生成签名,100天后过期
      *
      * @param userId   用户id
      * @param username 用户昵称
