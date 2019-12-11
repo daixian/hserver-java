@@ -1,7 +1,6 @@
 package com.dx.avserver.utils;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -29,9 +28,8 @@ public class JwtUtils {
     public static boolean verify(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            DecodedJWT jwt = verifier.verify(token);
-            //TODO:这里可能需要实现
+            JWT.require(algorithm).build().verify(token);
+            //这里只要不异常那么就是正确的
             return true;
         } catch (Exception exception) {
             return false;
@@ -46,7 +44,7 @@ public class JwtUtils {
     public static String getUsername(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("loginName").asString();
+            return jwt.getClaim("username").asString();
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -86,8 +84,8 @@ public class JwtUtils {
         // 附带username，userId信息，生成签名
         return JWT.create()
                 .withHeader(header)
-                .withClaim("loginName", username)
                 .withClaim("userId", userId)
+                .withClaim("username", username)
                 .withExpiresAt(date)
                 .sign(algorithm);
     }

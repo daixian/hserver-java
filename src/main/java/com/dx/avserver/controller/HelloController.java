@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,70 +48,81 @@ public class HelloController {
     }
 
     /**
-     * 用户注册
+     * 实验测试
      *
-     * @param req 用户传上来的内容
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = {"/test"}, method = RequestMethod.POST)
+    public ResponseDto TestRequestBody(@RequestBody Map<String, String> req) {
+        //这种请求里面必须在Headers里面写Content-Type为application/json
+        //然后再body里面写一个json
+
+        return ResponseDto.FAIL();
+    }
+
+    /**
+     * 用户注册它的类型是form-data
+     *
+     * @param userID 用户账号
+     * @param pwd    密码
+     * @param name   用户昵称
      * @return dto
      */
     @RequestMapping(value = {"/user/signin"}, method = RequestMethod.POST)
-    public ResponseDto SignIn(@RequestBody Map<String, String> req) {
-        String userID = req.get("userID");
-        String pwd = req.get("pwd");
-        String name = req.get("name");
-
-        ResponseDto dto = new ResponseDto();
-
-        User user = mUserDao.findOneByuserID(userID);
+    public ResponseDto SignIn(@RequestParam(value = "userID", required = true) String userID,
+                              @RequestParam(value = "pwd", required = true) String pwd,
+                              @RequestParam(value = "name", required = true) String name) {
+        User user = mUserDao.findOneByUserID(userID);
         //如果找不到这个用户记录，那么就新建一条
         if (user == null) {
             user = new User();
             user.setUserID(userID);
             user.setPassword(pwd);
-            user.setName(name);
+            if (!name.isEmpty())
+                user.setName(name);
+            else
+                user.setName("unnamed");
             user.setSignInDate(LocalDateTime.now());
             mUserDao.save(user);
-            dto.setStatus(ResponseDto.Status.SUCCESS);
-            return dto;
+            return ResponseDto.SUCCESS();
         }
 
-        return dto;
+        return ResponseDto.FAIL();
     }
 
     /**
      * 用户登录,登录成功的话返回一个token
      *
-     * @param req 用户传上来的内容
+     * @param userID 用户账号
+     * @param pwd    用户密码
      * @return dto
      */
     @RequestMapping(value = {"/user/login"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto login(@RequestBody Map<String, String> req) {
-        String userID = req.get("userID");
-        String pwd = req.get("pwd");
-        ResponseDto dto = new ResponseDto();
-
+    public ResponseDto login(@RequestParam(value = "userID", required = true) String userID,
+                             @RequestParam(value = "pwd", required = true) String pwd) {
         //数据库查用户
-        User user = mUserDao.findOneByuserID(userID);
+        User user = mUserDao.findOneByUserID(userID);
         if (user == null) {
-            return dto;
+            return ResponseDto.LOGIN_FAIL();
         }
         //如果密码不对
-        if (pwd.equals(user.getPassword())) {
-            dto.setStatus(ResponseDto.Status.LOGIN_FAIL_PWD_ERROR);
-            return dto;
+        if (!pwd.equals(user.getPassword())) {
+            return ResponseDto.LOGIN_FAIL_PWD_ERROR();
         }
         //密码通过了,返回token
-        String token = JwtUtils.sign(user.getName(), user.getUserID());
+        String token = JwtUtils.sign(user.getUserID(), user.getName());
         if (token != null) {
             Map<String, String> data = new HashMap<>();
             data.put("token", token);
+
+            ResponseDto dto = ResponseDto.SUCCESS();
             dto.setData(data);
-            dto.setStatus(ResponseDto.Status.SUCCESS);
             return dto;
         }
 
         //返回登陆失败消息
-        dto.setStatus(ResponseDto.Status.LOGIN_FAIL);
-        return dto;
+        return ResponseDto.LOGIN_FAIL();
     }
 }
