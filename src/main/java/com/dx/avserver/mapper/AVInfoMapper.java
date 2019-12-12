@@ -1,6 +1,7 @@
 package com.dx.avserver.mapper;
 
 import com.dx.avserver.dto.AVInfoDto;
+import com.dx.avserver.entity.AVGallery;
 import com.dx.avserver.entity.AVInfo;
 
 import org.mapstruct.Mapper;
@@ -25,6 +26,4 @@ public interface AVInfoMapper {
 
     //@Mapping(target = "ID", ignore = true)
     void toTarget(AVInfo source, @MappingTarget AVInfo target);
-
-
 }

@@ -3,6 +3,6 @@ package com.dx.avserver.utils.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "没找到这个番号...")
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "没找到这个资源...")
 public class ExceptionNotFound extends RuntimeException{
 }

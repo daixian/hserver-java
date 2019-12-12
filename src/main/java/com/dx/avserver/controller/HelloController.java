@@ -1,6 +1,8 @@
 package com.dx.avserver.controller;
 
+import com.dx.avserver.dao.AVGalleryDao;
 import com.dx.avserver.dao.AVInfoDao;
+import com.dx.avserver.dao.AVPerformDao;
 import com.dx.avserver.dao.UserDao;
 import com.dx.avserver.dto.AVInfoDto;
 import com.dx.avserver.utils.exception.ExceptionNotFound;
@@ -31,45 +33,13 @@ import lombok.extern.slf4j.Slf4j;
 public class HelloController {
 
     @Autowired
-    HelloController(AVInfoDao aVInfoDao, UserDao userDao) {
+    HelloController(UserDao userDao) {
         //如果构造函数这样写,实际使用的时候试了不写@Autowired,也能正常工作.
-        this.mAVInfoDao = aVInfoDao;
         this.mUserDao = userDao;
     }
 
-    private AVInfoDao mAVInfoDao;
     private UserDao mUserDao;
-
-    /**
-     * 访问形式:http://127.0.0.1:12002/info/TGGP-089
-     *
-     * @param avid 番号
-     * @return av信息
-     */
-    @RequestMapping(value = {"/info/{avid}",}, method = RequestMethod.GET)
-    public AVInfoDto getAVInfoWithAVID(@PathVariable("avid") String avid) {
-        log.info("通过番号查询信息！av_id:" + avid);
-        AVInfo info = mAVInfoDao.findOneByAvid(avid.toUpperCase());
-        if (info == null)
-            throw new ExceptionNotFound();
-        return AVInfoMapper.INSTANCE.toDto(info);
-    }
-
-    /**
-     * 访问形式:http://127.0.0.1:12002/search?avid=TGGP-089
-     *
-     * @param avid 番号
-     * @return av信息
-     */
-    @RequestMapping(value = {"/search",}, method = RequestMethod.GET)
-    public List<AVInfoDto> searchAVInfoWithAVID(@RequestParam("avid") String avid) {
-        log.info("通过番号搜索信息！av_id:" + avid);
-        List<AVInfo> list = mAVInfoDao.findFirst100ByAvidContaining(avid.toUpperCase());
-        if (list.isEmpty())
-            throw new ExceptionNotFound();
-        return AVInfoMapper.INSTANCE.toDto(list);
-    }
-
+    
     /**
      * 实验测试
      *

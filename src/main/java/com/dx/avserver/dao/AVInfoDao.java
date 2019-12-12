@@ -25,4 +25,6 @@ public interface AVInfoDao extends CrudRepository<AVInfo, String> {
 
 
     List<AVInfo> findFirst100ByJavBooksIdGreaterThanOrderByJavBooksIdDesc(int javBooksId);
+
+    List<AVInfo> findFirst100ByJavBooksIdLessThanOrderByJavBooksIdDesc(int javBooksId);
 }
