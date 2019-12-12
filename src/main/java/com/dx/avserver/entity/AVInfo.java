@@ -28,7 +28,7 @@ public class AVInfo implements Serializable {
     private String avid;
 
     @Column(name = "javbooks_id", unique = true)
-    private int javbooks_id;
+    private int javBooksId;
 
     @Column(name = "title")
     private String title;

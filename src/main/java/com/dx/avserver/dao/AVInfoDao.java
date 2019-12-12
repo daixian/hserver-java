@@ -22,4 +22,7 @@ public interface AVInfoDao extends CrudRepository<AVInfo, String> {
     //这个方法等于上面的方法了 https://stackoverflow.com/questions/25362540/like-query-in-spring-jparepository
     //官方详细文档: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
     List<AVInfo> findFirst100ByAvidContaining(String avid);
+
+
+    List<AVInfo> findFirst100ByJavBooksIdGreaterThanOrderByJavBooksIdDesc(int javBooksId);
 }

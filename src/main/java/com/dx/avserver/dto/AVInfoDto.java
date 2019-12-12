@@ -1,5 +1,7 @@
 package com.dx.avserver.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -19,4 +21,5 @@ public class AVInfoDto {
     private String issuer;
     private String series;
     private String cover_url;
+    private List<String> gallery;
 }
