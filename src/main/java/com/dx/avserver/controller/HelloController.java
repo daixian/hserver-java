@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,21 @@ public class HelloController {
         if (info == null)
             throw new ExceptionNotFound();
         return AVInfoMapper.INSTANCE.toDto(info);
+    }
+
+    /**
+     * 访问形式:http://127.0.0.1:12002/search?avid=TGGP-089
+     *
+     * @param avid 番号
+     * @return av信息
+     */
+    @RequestMapping(value = {"/search",}, method = RequestMethod.GET)
+    public List<AVInfoDto> searchAVInfoWithAVID(@RequestParam("avid") String avid) {
+        log.info("通过番号搜索信息！av_id:" + avid);
+        List<AVInfo> list = mAVInfoDao.findByAvidContaining(avid);
+        if (list.isEmpty())
+            throw new ExceptionNotFound();
+        return AVInfoMapper.INSTANCE.toDto(list);
     }
 
     /**

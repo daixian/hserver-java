@@ -9,6 +9,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 //entity -> DTO
 @Mapper(componentModel = "spring")
 public interface AVInfoMapper {
@@ -19,7 +21,10 @@ public interface AVInfoMapper {
     @Mappings({@Mapping(source = "info.avid", target = "av_id")})
     AVInfoDto toDto(AVInfo info);
 
+    List<AVInfoDto> toDto(List<AVInfo> infos);
+
     //@Mapping(target = "ID", ignore = true)
     void toTarget(AVInfo source, @MappingTarget AVInfo target);
+
 
 }
