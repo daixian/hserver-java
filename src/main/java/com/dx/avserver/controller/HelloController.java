@@ -49,7 +49,7 @@ public class HelloController {
     @RequestMapping(value = {"/info/{avid}",}, method = RequestMethod.GET)
     public AVInfoDto getAVInfoWithAVID(@PathVariable("avid") String avid) {
         log.info("通过番号查询信息！av_id:" + avid);
-        AVInfo info = mAVInfoDao.findOneByAvid(avid);
+        AVInfo info = mAVInfoDao.findOneByAvid(avid.toUpperCase());
         if (info == null)
             throw new ExceptionNotFound();
         return AVInfoMapper.INSTANCE.toDto(info);
@@ -64,7 +64,7 @@ public class HelloController {
     @RequestMapping(value = {"/search",}, method = RequestMethod.GET)
     public List<AVInfoDto> searchAVInfoWithAVID(@RequestParam("avid") String avid) {
         log.info("通过番号搜索信息！av_id:" + avid);
-        List<AVInfo> list = mAVInfoDao.findByAvidContaining(avid);
+        List<AVInfo> list = mAVInfoDao.findFirst100ByAvidContaining(avid.toUpperCase());
         if (list.isEmpty())
             throw new ExceptionNotFound();
         return AVInfoMapper.INSTANCE.toDto(list);
