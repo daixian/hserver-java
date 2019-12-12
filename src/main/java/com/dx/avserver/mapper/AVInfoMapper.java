@@ -13,12 +13,10 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface AVInfoMapper {
 
-    public static AVInfoMapper INSTANCE = Mappers.getMapper(AVInfoMapper.class);
+    AVInfoMapper INSTANCE = Mappers.getMapper(AVInfoMapper.class);
 
     //@InheritInverseConfiguration
-    @Mappings({
-            @Mapping(source = "info.avid", target = "av_id")
-    })
+    @Mappings({@Mapping(source = "info.avid", target = "av_id")})
     AVInfoDto toDto(AVInfo info);
 
     //@Mapping(target = "ID", ignore = true)

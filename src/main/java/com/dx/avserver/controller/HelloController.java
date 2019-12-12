@@ -30,9 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class HelloController {
 
     @Autowired
-    private AVInfoDao mAVInfoDao;
+    HelloController(AVInfoDao aVInfoDao, UserDao userDao) {
+        //如果构造函数这样写,实际使用的时候试了不写@Autowired,也能正常工作.
+        this.mAVInfoDao = aVInfoDao;
+        this.mUserDao = userDao;
+    }
 
-    @Autowired
+    private AVInfoDao mAVInfoDao;
     private UserDao mUserDao;
 
     /**
@@ -53,11 +57,12 @@ public class HelloController {
     /**
      * 实验测试
      *
-     * @param req
-     * @return
+     * @param req 客户端需要传一个json对象
+     * @return 随便返回个啥
      */
     @RequestMapping(value = {"/test"}, method = RequestMethod.POST)
     public ResponseDto TestRequestBody(@RequestBody Map<String, String> req) {
+        log.info("TestRequestBody():" + req);
         //这种请求里面必须在Headers里面写Content-Type为application/json
         //然后再body里面写一个json
 
@@ -73,9 +78,9 @@ public class HelloController {
      * @return dto
      */
     @RequestMapping(value = {"/user/signin"}, method = RequestMethod.POST)
-    public ResponseDto SignIn(@RequestParam(value = "userID", required = true) String userID,
-                              @RequestParam(value = "pwd", required = true) String pwd,
-                              @RequestParam(value = "name", required = true) String name) {
+    public ResponseDto SignIn(@RequestParam(value = "userID") String userID,
+                              @RequestParam(value = "pwd") String pwd,
+                              @RequestParam(value = "name") String name) {
         if (userID.isEmpty()) {
             return ResponseDto.FAIL();
         }
@@ -109,8 +114,8 @@ public class HelloController {
      */
     @RequestMapping(value = {"/user/login"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto login(@RequestParam(value = "userID", required = true) String userID,
-                             @RequestParam(value = "pwd", required = true) String pwd) {
+    public ResponseDto login(@RequestParam(value = "userID") String userID,
+                             @RequestParam(value = "pwd") String pwd) {
         if (userID.isEmpty()) {
             return ResponseDto.LOGIN_FAIL();
         }
