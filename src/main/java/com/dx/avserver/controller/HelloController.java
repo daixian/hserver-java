@@ -1,19 +1,11 @@
 package com.dx.avserver.controller;
 
-import com.dx.avserver.dao.AVGalleryDao;
-import com.dx.avserver.dao.AVInfoDao;
-import com.dx.avserver.dao.AVPerformDao;
 import com.dx.avserver.dao.UserDao;
-import com.dx.avserver.dto.AVInfoDto;
-import com.dx.avserver.utils.exception.ExceptionNotFound;
 import com.dx.avserver.dto.ResponseDto;
 import com.dx.avserver.entity.User;
-import com.dx.avserver.entity.AVInfo;
-import com.dx.avserver.mapper.AVInfoMapper;
 import com.dx.avserver.utils.JwtUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +30,7 @@ public class HelloController {
     }
 
     private UserDao mUserDao;
-    
+
     /**
      * 实验测试
      *

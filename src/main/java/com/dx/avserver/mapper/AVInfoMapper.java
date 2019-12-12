@@ -1,7 +1,6 @@
 package com.dx.avserver.mapper;
 
 import com.dx.avserver.dto.AVInfoDto;
-import com.dx.avserver.entity.AVGallery;
 import com.dx.avserver.entity.AVInfo;
 
 import org.mapstruct.Mapper;
@@ -19,8 +18,14 @@ public interface AVInfoMapper {
     AVInfoMapper INSTANCE = Mappers.getMapper(AVInfoMapper.class);
 
     //@InheritInverseConfiguration
-    @Mappings({@Mapping(source = "info.avid", target = "av_id")})
+    @Mappings({
+            @Mapping(source = "info.avid", target = "av_id"),
+            @Mapping(source = "info.javBooksId", target = "javbooks_id"),
+            @Mapping(target = "performers", ignore = true),
+            @Mapping(target = "gallery", ignore = true)
+    })
     AVInfoDto toDto(AVInfo info);
+
 
     List<AVInfoDto> toDto(List<AVInfo> infos);
 
