@@ -1,12 +1,19 @@
 package com.dx.avserver.entity;
 
-import java.io.Serializable;
+import com.dx.avserver.entity.embeddable.AVGalleryEmb;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -29,6 +36,11 @@ public class AVInfo implements Serializable {
 
     @Column(name = "javbooks_id", unique = true)
     private int javBooksId;
+
+    @ElementCollection
+    @CollectionTable(name = "av_performers_join_tbl", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "performer")
+    private List<String> performers;
 
     @Column(name = "title")
     private String title;
@@ -60,5 +72,7 @@ public class AVInfo implements Serializable {
     @Column(name = "cover", columnDefinition = "mediumblob")
     private byte[] cover;
 
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "av_gallery_join_tbl", joinColumns = @JoinColumn(name = "id"))
+    private List<AVGalleryEmb> gallery;
 }

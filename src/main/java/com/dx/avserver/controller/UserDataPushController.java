@@ -5,7 +5,10 @@ import com.dx.avserver.dao.AVInfoDao;
 import com.dx.avserver.dao.AVPerformDao;
 import com.dx.avserver.dao.UserDao;
 import com.dx.avserver.dto.AVInfoDto;
+import com.dx.avserver.entity.AVGallery;
 import com.dx.avserver.entity.AVInfo;
+import com.dx.avserver.entity.AVPerform;
+import com.dx.avserver.entity.embeddable.AVGalleryEmb;
 import com.dx.avserver.mapper.AVInfoMapper;
 import com.dx.avserver.utils.exception.ExceptionNotFound;
 
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -106,20 +110,47 @@ public class UserDataPushController {
 
     //私有函数: info到dto的转换,填充其他的信息
     private AVInfoDto _AVInfoToDto(AVInfo info) {
-        AVInfoDto dto = AVInfoMapper.INSTANCE.toDto(info);
-        dto.setSupplementData(
-                mAVPerformDao.findByAvid(info.getAvid()),
-                mAVGalleryDao.findByAvid(info.getAvid()));
-        return dto;
+        //表示这条信息还没有被缓存记录过
+        if (info.getPerformers() == null || info.getPerformers().isEmpty()) {
+            AVInfoDto dto = AVInfoMapper.INSTANCE.toDto(info);
+            List<AVPerform> listPerform = mAVPerformDao.findByAvid(info.getAvid());
+            List<AVGallery> listGallery = mAVGalleryDao.findByAvid(info.getAvid());
+            dto.setSupplementData(listPerform, listGallery);
+
+            List<String> performers = new ArrayList<>();
+            for (AVPerform item : listPerform) {
+                performers.add(item.getPerformer());
+            }
+            info.setPerformers(performers);
+
+            List<AVGalleryEmb> gallery = new ArrayList<>();
+            for (AVGallery item : listGallery) {
+                AVGalleryEmb emb = new AVGalleryEmb();
+                emb.setImageUrl(item.getImageUrl());
+                gallery.add(emb);
+            }
+            info.setGallery(gallery);
+            mAVInfoDao.save(info);
+            return dto;
+        } else {
+            AVInfoDto dto = AVInfoMapper.INSTANCE.toDto(info);
+            return dto;
+        }
     }
 
     //私有函数: info到dto的转换,填充其他的信息
     private List<AVInfoDto> _AVInfoListToDto(List<AVInfo> list) {
-        List<AVInfoDto> dto = AVInfoMapper.INSTANCE.toDto(list);
-        for (AVInfoDto item : dto) {
-            item.setSupplementData(
-                    mAVPerformDao.findByAvid(item.getAv_id()),
-                    mAVGalleryDao.findByAvid(item.getAv_id()));
+//        List<AVInfoDto> dto = AVInfoMapper.INSTANCE.toDto(list);
+//        for (AVInfoDto item : dto) {
+//            item.setSupplementData(
+//                    mAVPerformDao.findByAvid(item.getAv_id()),
+//                    mAVGalleryDao.findByAvid(item.getAv_id()));
+//        }
+
+        List<AVInfoDto> dto = new ArrayList<>();
+        for (AVInfo info : list) {
+            AVInfoDto infoDto = _AVInfoToDto(info);
+            dto.add(infoDto);
         }
         return dto;
     }
