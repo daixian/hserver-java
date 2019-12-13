@@ -107,7 +107,7 @@ public class UserDataPushController {
     }
 
     @RequestMapping(value = {"/dx/creatjson",}, method = RequestMethod.GET)
-    public String creatjson(@RequestParam("javid") int javId) {
+    public String creatjson() {
         for (AVInfo info : mAVInfoDao.findAll()) {
             _AVInfoToDto(info);
         }
