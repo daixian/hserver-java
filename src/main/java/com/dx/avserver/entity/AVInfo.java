@@ -1,5 +1,6 @@
 package com.dx.avserver.entity;
 
+import com.alibaba.fastjson.JSON;
 import com.dx.avserver.entity.embeddable.AVGalleryEmb;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -36,11 +38,6 @@ public class AVInfo implements Serializable {
 
     @Column(name = "javbooks_id", unique = true)
     private int javBooksId;
-
-    @ElementCollection
-    @CollectionTable(name = "av_performers_join_tbl", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "performer")
-    private List<String> performers;
 
     @Column(name = "title")
     private String title;
@@ -72,7 +69,22 @@ public class AVInfo implements Serializable {
     @Column(name = "cover", columnDefinition = "mediumblob")
     private byte[] cover;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "av_gallery_join_tbl", joinColumns = @JoinColumn(name = "id"))
-    private List<AVGalleryEmb> gallery;
+    @Column(name = "json_data",columnDefinition = "text")
+    private String jsonDataText;
+
+    @Transient
+    private AVInfoJsonData jsonDataObj;
+
+    public void serializeJson() {
+        if (jsonDataObj == null) {
+            jsonDataObj = new AVInfoJsonData();
+        }
+        jsonDataText = JSON.toJSONString(jsonDataObj);
+    }
+
+    public void deserializeJson() {
+        if (jsonDataText == null || jsonDataText.isEmpty())
+            jsonDataObj = new AVInfoJsonData();
+        jsonDataObj = JSON.parseObject(jsonDataText, AVInfoJsonData.class);
+    }
 }

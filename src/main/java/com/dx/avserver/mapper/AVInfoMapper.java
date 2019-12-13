@@ -21,7 +21,9 @@ public abstract class AVInfoMapper {
     //@InheritInverseConfiguration
     @Mappings({
             @Mapping(source = "info.avid", target = "av_id"),
-            @Mapping(source = "info.javBooksId", target = "javbooks_id")
+            @Mapping(source = "info.javBooksId", target = "javbooks_id"),
+            @Mapping(source = "info.jsonDataObj.performers", target = "performers"),
+            @Mapping(source = "info.jsonDataObj.gallery", target = "gallery")
     })
     public abstract AVInfoDto toDto(AVInfo info);
 
