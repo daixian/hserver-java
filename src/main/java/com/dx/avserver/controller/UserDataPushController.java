@@ -106,6 +106,14 @@ public class UserDataPushController {
         return _AVInfoListToDto(list);
     }
 
+    @RequestMapping(value = {"/dx/creatjson",}, method = RequestMethod.GET)
+    public String creatjson(@RequestParam("javid") int javId) {
+        for (AVInfo info : mAVInfoDao.findAll()) {
+            _AVInfoToDto(info);
+        }
+        return "json生成完成!!";
+    }
+
     //----------------------------------------------------------------------------------------------
 
     //私有函数: info到dto的转换,填充其他的信息
