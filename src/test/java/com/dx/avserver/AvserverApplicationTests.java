@@ -38,27 +38,27 @@ class AvserverApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void AVInfoMapperTest() {
-        AVInfo info = new AVInfo();
-        info.setAvid("TEST-002");
-        info.setJavBooksId(1000002);
-
-        info.setTitle("groovin’ 超ハイレグキャンギャルDANCE GROO-051");
-        info.setKeywords("GROO-051,----,DMM独家");
-        info.setReleases_time("releases_time");
-        info.setCover_url("https://pics.dmm.co.jp/digital/video/groo00051/groo00051pl.jpg");
-        List<AVGalleryEmb> gallery = new ArrayList<AVGalleryEmb>();
-        for (int i = 0; i < 4; i++) {
-            AVGalleryEmb emb = new AVGalleryEmb();
-            emb.setImageUrl("url:" + i);
-            gallery.add(emb);
-        }
-        info.setGallery(gallery);
-
-        AVInfoDto dto = AVInfoMapper.INSTANCE.toDto(info);
-        assertTrue("读取到的结果图片url=3", dto.getGallery().size() == info.getGallery().size());
-    }
+//    @Test
+//    void AVInfoMapperTest() {
+//        AVInfo info = new AVInfo();
+//        info.setAvid("TEST-002");
+//        info.setJavBooksId(1000002);
+//
+//        info.setTitle("groovin’ 超ハイレグキャンギャルDANCE GROO-051");
+//        info.setKeywords("GROO-051,----,DMM独家");
+//        info.setReleases_time("releases_time");
+//        info.setCover_url("https://pics.dmm.co.jp/digital/video/groo00051/groo00051pl.jpg");
+//        List<AVGalleryEmb> gallery = new ArrayList<AVGalleryEmb>();
+//        for (int i = 0; i < 4; i++) {
+//            AVGalleryEmb emb = new AVGalleryEmb();
+//            emb.setImageUrl("url:" + i);
+//            gallery.add(emb);
+//        }
+//        info.setGallery(gallery);
+//
+//        AVInfoDto dto = AVInfoMapper.INSTANCE.toDto(info);
+//        assertTrue("读取到的结果图片url=3", dto.getGallery().size() == info.getGallery().size());
+//    }
 
 
 //    @Test
