@@ -107,9 +107,16 @@ public class UserDataPushController {
     }
 
     @RequestMapping(value = {"/dx/creatjson",}, method = RequestMethod.GET)
-    public String creatjson() {
-        for (AVInfo info : mAVInfoDao.findAll()) {
-            _AVInfoToDto(info);
+    public String creatjson(@RequestParam("javid") int javId) {
+        //这个单条的执行速度很慢(在所有的机器上执行都是好几秒一条)
+//        for (AVInfo info : mAVInfoDao.findAll()) {
+//            _AVInfoToDto(info);
+//        }
+        while (javId > 0) {
+            List<AVInfo> list = mAVInfoDao.findFirst1000ByJavBooksIdLessThanOrderByJavBooksIdDesc(javId);
+            if (list.isEmpty())
+                throw new ExceptionNotFound();
+            _AVInfoListToDto(list);
         }
         return "json生成完成!!";
     }
