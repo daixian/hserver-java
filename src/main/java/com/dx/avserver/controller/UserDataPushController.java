@@ -112,11 +112,18 @@ public class UserDataPushController {
 //        for (AVInfo info : mAVInfoDao.findAll()) {
 //            _AVInfoToDto(info);
 //        }
+        //合并一起执行的速度要快很多很多,原因不明
         while (javId > 0) {
+            log.info("开始执行creatjson,当前javId={}", javId);
+            long startTime = System.currentTimeMillis();    //获取开始时间
             List<AVInfo> list = mAVInfoDao.findFirst1000ByJavBooksIdLessThanOrderByJavBooksIdDesc(javId);
             if (list.isEmpty())
                 throw new ExceptionNotFound();
             _AVInfoListToDto(list);
+            long endTime = System.currentTimeMillis();    //获取结束时间
+            float costTime = (endTime - startTime) / 1000.0f;
+            log.info("完成了1000条用时{}秒", costTime);
+            javId -= 1000;
         }
         return "json生成完成!!";
     }
