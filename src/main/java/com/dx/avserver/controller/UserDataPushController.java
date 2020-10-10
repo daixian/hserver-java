@@ -128,6 +128,28 @@ public class UserDataPushController {
         return "json生成完成!!";
     }
 
+    @RequestMapping(value = {"/dx/creatjsonup",}, method = RequestMethod.GET)
+    public String creatjsonUp(@RequestParam("javid") int javId) {
+        //这个单条的执行速度很慢(在所有的机器上执行都是好几秒一条)
+//        for (AVInfo info : mAVInfoDao.findAll()) {
+//            _AVInfoToDto(info);
+//        }
+        //合并一起执行的速度要快很多很多,原因不明
+        while (javId <200000) {
+            log.info("开始执行creatjson,当前javId={}", javId);
+            long startTime = System.currentTimeMillis();    //获取开始时间
+            List<AVInfo> list = mAVInfoDao.findFirst1000ByJavBooksIdLessThanOrderByJavBooksIdDesc(javId);
+            if (list.isEmpty())
+                throw new ExceptionNotFound();
+            _AVInfoListToDto(list);
+            long endTime = System.currentTimeMillis();    //获取结束时间
+            float costTime = (endTime - startTime) / 1000.0f;
+            log.info("完成了1000条UP用时{}秒", costTime);
+            javId += 1000;
+        }
+        return "json生成完成!!";
+    }
+
     //----------------------------------------------------------------------------------------------
 
     //私有函数: info到dto的转换,填充其他的信息
